@@ -1,4 +1,5 @@
 version: '3'
+# MODIFICACIÓN PARA PRUEBAS DE GITHUB Y PUSHES
 # Especificamos, por una parte los tres programas que necesitamos:
 # Postgres, Redis y Nginx
 # A continuación los tres tipos de servicios que necesitamos para los tres
