@@ -1,0 +1,62 @@
+version: '3'
+# Especificamos, por una parte los tres programas que necesitamos:
+# Postgres, Redis y Nginx
+# A continuación los tres tipos de servicios que necesitamos para los tres
+# componentes del proyecto: 
+# Server, client y Worker
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
+  redis:
+    image: 'redis:latest'
+  nginx:
+    restart: always
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - '3050:80'
+# El servidor necesita varias configuraciones extra a parte de especificiar 
+# la carpeta del servidor. Ahora se llama api debido a la config de nginx
+  api:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+# Vartiables necesarias para montar el servidor
+# Estos valores están sacados básicamente de la documentación en dockerhub
+# y son símplemente los predeterminados
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+  client:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    volumes:
+      - /home/node/app/node_modules
+      - ./client:/home/node/app
+    environment:
+      - WDS_SOCKET_PORT=0
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+# Los puertos por los que accedereos al proyecto no los mapeamos aquí
+# por que están manejados por nginx en el archivo default.conf
+# (video 219)

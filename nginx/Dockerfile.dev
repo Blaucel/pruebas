@@ -1,0 +1,5 @@
+FROM nginx
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+
+# Creamos un docker de nginx pero sustituyendo su configuración por la que
+# hemos definido en nuestro archivo default.conf
