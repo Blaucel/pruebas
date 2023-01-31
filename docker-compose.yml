@@ -4,7 +4,7 @@ version: '3'
 # Postgres, Redis y Nginx
 # A continuación los tres tipos de servicios que necesitamos para los tres
 # componentes del proyecto: 
-# Server, client y Worker
+# Server, client y Worker PATATATATATA
 services:
   postgres:
     image: 'postgres:latest'
